@@ -1,0 +1,71 @@
+create DATABASE todolistdb;
+
+create table priority
+(
+    id   int auto_increment
+        primary key,
+    name varchar(60) null,
+    constraint priority_name_uindex
+        unique (name)
+);
+
+create table status
+(
+    id   int auto_increment
+        primary key,
+    name varchar(50) null,
+    constraint STATUS_name_uindex
+        unique (name)
+);
+
+create table users
+(
+    id         int auto_increment
+        primary key,
+    name       varchar(50)  null,
+    surname    varchar(50)  null,
+    middlename varchar(50)  null,
+    login      varchar(50)  null,
+    password   varchar(150) null,
+    leader_id  int          null,
+    constraint users_ibfk_1
+        foreign key (leader_id) references users (id)
+);
+
+create table tasks
+(
+    id          int auto_increment
+        primary key,
+    name        varchar(100) null,
+    description varchar(300) null,
+    date_end    date         null,
+    date_create date         null,
+    date_update date         null,
+    priority_id int          null,
+    status_id   int          null,
+    creator_id  int          null,
+    executer_id int          null,
+    constraint tasks_ibfk_1
+        foreign key (creator_id) references users (id),
+    constraint tasks_ibfk_2
+        foreign key (executer_id) references users (id),
+    constraint tasks_ibfk_3
+        foreign key (priority_id) references priority (id),
+    constraint tasks_ibfk_4
+        foreign key (status_id) references status (id)
+);
+
+create index CREATOR_ID
+    on tasks (creator_id);
+
+create index EXECUTER_ID
+    on tasks (executer_id);
+
+create index PRIORITY_ID
+    on tasks (priority_id);
+
+create index STATUS_ID
+    on tasks (status_id);
+
+create index LEADER_ID
+    on users (leader_id);
